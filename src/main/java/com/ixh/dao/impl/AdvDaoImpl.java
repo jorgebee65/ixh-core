@@ -1,5 +1,6 @@
 package com.ixh.dao.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -12,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ixh.dao.AdvDao;
 import com.ixh.exception.DatabaseExceptionCO;
+import com.ixh.model.bo.AdvertiseBO;
+import com.ixh.model.builder.Builders;
 import com.ixh.model.po.AdvertisePO;
 
 
@@ -23,23 +26,28 @@ public class AdvDaoImpl implements AdvDao {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<AdvertisePO> getAllAdvertises() {
+	public List<AdvertiseBO> getAllAdvertises() {
+		List<AdvertiseBO> lstBO = new ArrayList<>();
 		String hql = "FROM AdvertisePO";
-		return (List<AdvertisePO>) entityManager.createQuery(hql).getResultList();
+		List<AdvertisePO> lstPO = (List<AdvertisePO>) entityManager.createQuery(hql).getResultList();
+		if(lstPO!=null && !lstPO.isEmpty()) {
+			lstBO = Builders.advBuilder.buildListBO(lstPO);
+		}
+		return lstBO;
 	}
 	
 	@Override
-	public AdvertisePO find(Long id) throws DatabaseExceptionCO {
-		AdvertisePO po = new AdvertisePO();
+	public AdvertiseBO find(Long id) throws DatabaseExceptionCO {
+		AdvertiseBO bo = new AdvertiseBO();
 		String hql = "FROM AdvertisePO where advId = :advID";
 		try {
 			Query query = entityManager.createQuery(hql);
 			query.setParameter("advID", id);
-			po = (AdvertisePO) query.getSingleResult();
+			bo = Builders.advBuilder.buildBO((AdvertisePO) query.getSingleResult());
 		} catch (NoResultException sre) {
 			throw new DatabaseExceptionCO("Advertisement " + id + " not founded");
 		}
-		return po;
+		return bo;
 	}
 	
 }

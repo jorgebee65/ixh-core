@@ -3,12 +3,12 @@ package com.ixh.dao;
 import java.util.List;
 
 import com.ixh.exception.DatabaseExceptionCO;
-import com.ixh.model.po.AdvertisePO;
+import com.ixh.model.bo.AdvertiseBO;
 
 public interface AdvDao {
 
-	List<AdvertisePO> getAllAdvertises();
+	List<AdvertiseBO> getAllAdvertises();
 
-	AdvertisePO find(Long id) throws DatabaseExceptionCO;
+	AdvertiseBO find(Long id) throws DatabaseExceptionCO;
 
 }

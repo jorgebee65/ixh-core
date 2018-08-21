@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.ixh.dao.CategoryDAO;
+import com.ixh.model.bo.GroupAdvBO;
 import com.ixh.model.po.CategoryPO;
 
 @Controller
@@ -27,5 +28,10 @@ public class CategoryController {
 		return new ResponseEntity<List<CategoryPO>>(list,HttpStatus.OK);
 	}
 	
+	@RequestMapping(value="/groups",method= RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public ResponseEntity<?> getGroups(){
+		List<GroupAdvBO> results = catDAO.getGroups();
+		return new ResponseEntity<List<GroupAdvBO>>(results,HttpStatus.OK);
+	}
 
 }

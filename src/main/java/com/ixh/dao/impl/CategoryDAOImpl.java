@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ixh.dao.CategoryDAO;
+import com.ixh.model.bo.GroupAdvBO;
 import com.ixh.model.po.CategoryPO;
 
 @Transactional
@@ -23,6 +24,17 @@ public class CategoryDAOImpl implements CategoryDAO {
 	public List<CategoryPO> getAllCategories() {
 		String hql = "FROM CategoryPO";
 		return (List<CategoryPO>) entityManager.createQuery(hql).getResultList();
+	}
+	
+	@Override
+	public List<GroupAdvBO> getGroups(){
+		StringBuilder sb = new StringBuilder("SELECT new com.ixh.model.bo.GroupAdvBO(cat.description, count(cat.description), cat.icon) ");
+		sb.append(" from AdvertisePO ad JOIN CategoryPO cat ");
+		sb.append(" on cat.catId = ad.category.catId ");
+		sb.append(" group by cat.description ");
+		@SuppressWarnings("unchecked")
+		List<GroupAdvBO> res = (List<GroupAdvBO>) entityManager.createQuery(sb.toString()).getResultList();
+		return res;
 	}
 
 }

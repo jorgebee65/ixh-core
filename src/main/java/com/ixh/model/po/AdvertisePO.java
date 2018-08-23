@@ -2,6 +2,7 @@ package com.ixh.model.po;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -28,9 +30,13 @@ public class AdvertisePO implements Serializable{
 	private Integer discount;
 	private String image;
 	
+	@OneToOne(mappedBy = "advPO", cascade = CascadeType.ALL, 
+    fetch = FetchType.LAZY, optional = false)
+	private AdvDetailsPO details;
+	
 	@ManyToOne(fetch=FetchType.LAZY)
-	  @JoinColumn(name="cat_id")
-	  private CategoryPO category;
+	@JoinColumn(name="cat_id")
+	private CategoryPO category;
 	
 	
 	public Long getAdvId() {
@@ -76,4 +82,16 @@ public class AdvertisePO implements Serializable{
 	public void setCategory(CategoryPO category) {
 		this.category = category;
 	}
+	
+	public void setDetails(AdvDetailsPO details) {
+        if (details == null) {
+            if (this.details != null) {
+                this.details.setAdvPO(null);
+            }
+        }
+        else {
+            details.setAdvPO(this);
+        }
+        this.details = details;
+    }
 }

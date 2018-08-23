@@ -15,6 +15,7 @@ import com.ixh.dao.AdvDao;
 import com.ixh.exception.DatabaseExceptionCO;
 import com.ixh.model.bo.AdvertiseBO;
 import com.ixh.model.builder.Builders;
+import com.ixh.model.po.AdvDetailsPO;
 import com.ixh.model.po.AdvertisePO;
 
 
@@ -39,11 +40,12 @@ public class AdvDaoImpl implements AdvDao {
 	@Override
 	public AdvertiseBO find(Long id) throws DatabaseExceptionCO {
 		AdvertiseBO bo = new AdvertiseBO();
-		String hql = "FROM AdvertisePO where advId = :advID";
+		//String hql = "FROM AdvertisePO where advId = :advID";
+		String hql = "FROM AdvDetailsPO where advPO.advId = :advID";
 		try {
 			Query query = entityManager.createQuery(hql);
 			query.setParameter("advID", id);
-			bo = Builders.advBuilder.buildBO((AdvertisePO) query.getSingleResult());
+			bo = Builders.advBuilder.buildFullBO((AdvDetailsPO)query.getSingleResult());
 		} catch (NoResultException sre) {
 			throw new DatabaseExceptionCO("Advertisement " + id + " not founded");
 		}

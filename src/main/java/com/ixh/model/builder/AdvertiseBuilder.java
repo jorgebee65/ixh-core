@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ixh.model.bo.AdvertiseBO;
+import com.ixh.model.po.AdvDetailsPO;
 import com.ixh.model.po.AdvertisePO;
 import com.ixh.util.AppFormatter;
 
@@ -44,9 +45,15 @@ public class AdvertiseBuilder implements Builder<AdvertiseBO, AdvertisePO> {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	public AdvertiseBO buildFullBO(AdvDetailsPO po) {
+		AdvertiseBO bo = buildBO(po.getAdvPO());
+		bo.setPhone(po.getPhone());
+		bo.setEmail(po.getEmail());
+		bo.setFacebook(po.getFacebook());
+		bo.setInstagram(po.getInstagram());
+		bo.setWeb(po.getWeb());
+		return bo;
+	}
 
-	
-
-	
-	
 }

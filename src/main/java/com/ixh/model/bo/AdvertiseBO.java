@@ -9,6 +9,13 @@ public class AdvertiseBO extends BaseBO {
 	private String sOriginalPrice;
 	private CategoryBO category;
 	
+	//Details
+	private String phone; 
+	private String email;
+	private String facebook;
+	private String instagram;
+	private String web;
+	
 	public String getTitle() {
 		return title;
 	}
@@ -45,5 +52,35 @@ public class AdvertiseBO extends BaseBO {
 	}
 	public void setCategory(CategoryBO category) {
 		this.category = category;
+	}
+	public String getPhone() {
+		return phone;
+	}
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public String getFacebook() {
+		return facebook;
+	}
+	public void setFacebook(String facebook) {
+		this.facebook = facebook;
+	}
+	public String getInstagram() {
+		return instagram;
+	}
+	public void setInstagram(String instagram) {
+		this.instagram = instagram;
+	}
+	public String getWeb() {
+		return web;
+	}
+	public void setWeb(String web) {
+		this.web = web;
 	}
 }

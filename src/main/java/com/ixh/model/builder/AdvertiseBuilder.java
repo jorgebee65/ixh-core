@@ -53,6 +53,8 @@ public class AdvertiseBuilder implements Builder<AdvertiseBO, AdvertisePO> {
 		bo.setFacebook(po.getFacebook());
 		bo.setInstagram(po.getInstagram());
 		bo.setWeb(po.getWeb());
+		bo.setLatitude(po.getLatitude());
+		bo.setLongitude(po.getLongitude());
 		return bo;
 	}
 

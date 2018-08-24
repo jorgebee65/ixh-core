@@ -15,6 +15,8 @@ public class AdvertiseBO extends BaseBO {
 	private String facebook;
 	private String instagram;
 	private String web;
+	private Double latitude;
+	private Double longitude;
 	
 	public String getTitle() {
 		return title;
@@ -82,5 +84,17 @@ public class AdvertiseBO extends BaseBO {
 	}
 	public void setWeb(String web) {
 		this.web = web;
+	}
+	public Double getLatitude() {
+		return latitude;
+	}
+	public void setLatitude(Double latitude) {
+		this.latitude = latitude;
+	}
+	public Double getLongitude() {
+		return longitude;
+	}
+	public void setLongitude(Double longitude) {
+		this.longitude = longitude;
 	}
 }

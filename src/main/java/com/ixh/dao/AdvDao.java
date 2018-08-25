@@ -11,4 +11,8 @@ public interface AdvDao {
 
 	AdvertiseBO find(Long id) throws DatabaseExceptionCO;
 
+	List<AdvertiseBO> getAdvsByCategory(Long id);
+
+	List<AdvertiseBO> getAdvsByStrCategory(String sCategory);
+
 }

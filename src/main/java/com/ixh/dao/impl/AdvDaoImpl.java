@@ -40,7 +40,6 @@ public class AdvDaoImpl implements AdvDao {
 	@Override
 	public AdvertiseBO find(Long id) throws DatabaseExceptionCO {
 		AdvertiseBO bo = new AdvertiseBO();
-		//String hql = "FROM AdvertisePO where advId = :advID";
 		String hql = "FROM AdvDetailsPO where advPO.advId = :advID";
 		try {
 			Query query = entityManager.createQuery(hql);
@@ -50,6 +49,34 @@ public class AdvDaoImpl implements AdvDao {
 			throw new DatabaseExceptionCO("Advertisement " + id + " not founded");
 		}
 		return bo;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<AdvertiseBO> getAdvsByCategory(Long id) {
+		List<AdvertiseBO> lstBO = new ArrayList<>();
+		String hql = "select adv FROM AdvertisePO adv where adv.category.catId = :catId ";
+		Query query = entityManager.createQuery(hql);
+		query.setParameter("catId", id);
+		List<AdvertisePO> lstPO = (List<AdvertisePO>) query.getResultList();
+		if(lstPO!=null && !lstPO.isEmpty()) {
+			lstBO = Builders.advBuilder.buildListBO(lstPO);
+		}
+		return lstBO;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<AdvertiseBO> getAdvsByStrCategory(String sCategory) {
+		List<AdvertiseBO> lstBO = new ArrayList<>();
+		String hql = "select adv FROM AdvertisePO adv where adv.category.description = :catId ";
+		Query query = entityManager.createQuery(hql);
+		query.setParameter("catId", sCategory);
+		List<AdvertisePO> lstPO = (List<AdvertisePO>) query.getResultList();
+		if(lstPO!=null && !lstPO.isEmpty()) {
+			lstBO = Builders.advBuilder.buildListBO(lstPO);
+		}
+		return lstBO;
 	}
 	
 }

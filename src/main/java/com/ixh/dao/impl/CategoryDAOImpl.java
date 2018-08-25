@@ -28,7 +28,7 @@ public class CategoryDAOImpl implements CategoryDAO {
 	
 	@Override
 	public List<GroupAdvBO> getGroups(){
-		StringBuilder sb = new StringBuilder("SELECT new com.ixh.model.bo.GroupAdvBO(cat.description, count(cat.description), cat.icon) ");
+		StringBuilder sb = new StringBuilder("SELECT new com.ixh.model.bo.GroupAdvBO(cat.catId, cat.description, count(cat.description), cat.icon) ");
 		sb.append(" from AdvertisePO ad JOIN CategoryPO cat ");
 		sb.append(" on cat.catId = ad.category.catId ");
 		sb.append(" group by cat.description ");

@@ -29,9 +29,21 @@ public class AdvController {
 	}
 	
 	@RequestMapping(value = "/advs/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<AdvertiseBO> getTaqueria(@PathVariable("id") long id) throws DatabaseExceptionCO {
+	public ResponseEntity<AdvertiseBO> getAdvertise(@PathVariable("id") long id) throws DatabaseExceptionCO {
 		AdvertiseBO po = advDAO.find(id);
 		return new ResponseEntity<AdvertiseBO>(po, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/advs/category/{id}",method= RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public ResponseEntity<?> getAdvsByCat(@PathVariable("id") long id) {
+		List<AdvertiseBO> list = advDAO.getAdvsByCategory(id);
+		return new ResponseEntity<List<AdvertiseBO>>(list,HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/advs/scategory/{scat}",method= RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public ResponseEntity<?> getAdvsByCat(@PathVariable("scat") String sParam) {
+		List<AdvertiseBO> list = advDAO.getAdvsByStrCategory(sParam);
+		return new ResponseEntity<List<AdvertiseBO>>(list,HttpStatus.OK);
 	}
 
 }

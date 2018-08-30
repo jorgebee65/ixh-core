@@ -1,6 +1,7 @@
 package com.ixh.model.po;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -13,6 +14,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 @Table(name="Advertise")
@@ -29,6 +32,12 @@ public class AdvertisePO implements Serializable{
 	private Float price;
 	private Integer discount;
 	private String image;
+	@Column(name="date_start")
+	@Temporal(TemporalType.DATE)
+	private Date start;
+	@Column(name="date_end")
+	@Temporal(TemporalType.DATE)
+	private Date ends;
 	
 	@OneToOne(mappedBy = "advPO", cascade = CascadeType.ALL, 
     fetch = FetchType.LAZY, optional = false)
@@ -94,4 +103,16 @@ public class AdvertisePO implements Serializable{
         }
         this.details = details;
     }
+	public Date getStart() {
+		return start;
+	}
+	public void setStart(Date start) {
+		this.start = start;
+	}
+	public Date getEnds() {
+		return ends;
+	}
+	public void setEnds(Date ends) {
+		this.ends = ends;
+	}
 }

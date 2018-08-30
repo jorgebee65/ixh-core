@@ -1,5 +1,7 @@
 package com.ixh.model.bo;
 
+import java.util.Date;
+
 public class AdvertiseBO extends BaseBO {
 	private String title;
 	private String image;
@@ -8,6 +10,8 @@ public class AdvertiseBO extends BaseBO {
 	private String sDiscount;
 	private String sOriginalPrice;
 	private CategoryBO category;
+	private Date start;
+	private Date ends;
 	
 	//Details
 	private String phone; 
@@ -96,5 +100,17 @@ public class AdvertiseBO extends BaseBO {
 	}
 	public void setLongitude(Double longitude) {
 		this.longitude = longitude;
+	}
+	public Date getStart() {
+		return start;
+	}
+	public void setStart(Date start) {
+		this.start = start;
+	}
+	public Date getEnds() {
+		return ends;
+	}
+	public void setEnds(Date ends) {
+		this.ends = ends;
 	}
 }

@@ -22,6 +22,8 @@ public class AdvertiseBuilder implements Builder<AdvertiseBO, AdvertisePO> {
 		  Float originalPrice = ((po.getPrice()*100)/(float)(100-po.getDiscount()));
 		  bo.setsOriginalPrice(AppFormatter.toCurrencyTx(originalPrice));
 		  bo.setCategory(Builders.catbuilder.buildBO(po.getCategory()));
+		  bo.setStart(po.getStart());
+		  bo.setEnds(po.getEnds());
 		return bo;
 	}
 

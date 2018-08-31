@@ -13,6 +13,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.ixh.dao.UserDAO;
 import com.ixh.exception.DatabaseExceptionCO;
+import com.ixh.model.bo.UserBO;
 import com.ixh.model.po.UserPO;
 
 @Controller
@@ -29,9 +30,9 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "/users/{uid}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<UserPO> getAdvertise(@PathVariable("uid") String uid) throws DatabaseExceptionCO {
-		UserPO po = userDAO.find(uid);
-		return new ResponseEntity<UserPO>(po, HttpStatus.OK);
+	public ResponseEntity<UserBO> getAdvertise(@PathVariable("uid") String uid) throws DatabaseExceptionCO {
+		UserBO bo = userDAO.find(uid);
+		return new ResponseEntity<UserBO>(bo, HttpStatus.OK);
 	}
 
 

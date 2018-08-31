@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ixh.dao.UserDAO;
 import com.ixh.exception.DatabaseExceptionCO;
+import com.ixh.model.bo.UserBO;
+import com.ixh.model.builder.Builders;
 import com.ixh.model.po.UserPO;
 
 @Transactional
@@ -27,13 +29,13 @@ public class UserDAOImpl implements UserDAO {
 	}
 	
 	@Override
-	public UserPO find(String uid) throws DatabaseExceptionCO {
-		UserPO user = null;
+	public UserBO find(String uid) throws DatabaseExceptionCO {
+		UserBO user = null;
 		String hql = "FROM UserPO where uid = :uid";
 		try {
 			Query query = entityManager.createQuery(hql);
 			query.setParameter("uid", uid);
-			user = (UserPO)query.getSingleResult();
+			user = Builders.userBuilder.buildBO((UserPO)query.getSingleResult());
 		} catch (NoResultException sre) {
 			throw new DatabaseExceptionCO("User " + uid + " not founded");
 		}

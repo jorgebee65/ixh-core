@@ -1,6 +1,7 @@
 package com.ixh.model.po;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "cupon")
@@ -31,6 +34,17 @@ public class CuponPO implements Serializable{
 	private UserPO userPO;
 	
 	private String code;
+	
+	@Column(nullable = false, columnDefinition = "TINYINT(1)")
+	private boolean active;
+	
+	@Column(name = "creation_time")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date creationDate;
+	
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="adv_id")
+	private AdvertisePO adv;
 
 	public long getId() {
 		return id;
@@ -79,6 +93,30 @@ public class CuponPO implements Serializable{
 		if (id != other.id)
 			return false;
 		return true;
+	}
+
+	public Date getCreationDate() {
+		return creationDate;
+	}
+
+	public void setCreationDate(Date creationDate) {
+		this.creationDate = creationDate;
+	}
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+
+	public AdvertisePO getAdv() {
+		return adv;
+	}
+
+	public void setAdv(AdvertisePO adv) {
+		this.adv = adv;
 	}
 	
 	

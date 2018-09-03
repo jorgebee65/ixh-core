@@ -29,7 +29,17 @@ public class AdvertiseBuilder implements Builder<AdvertiseBO, AdvertisePO> {
 
 	@Override
 	public AdvertisePO buildPO(AdvertiseBO bo) {
-		// TODO Auto-generated method stub
+		AdvertisePO po = new AdvertisePO();
+		if(bo!=null && bo.getId()!=null) {
+			po.setAdvId(bo.getId());
+			if(bo.getCategory()!=null)
+				po.setCategory(Builders.catBuilder.buildPO(bo.getCategory()));
+			po.setDescription(bo.getDescription());
+			po.setImage(bo.getImage());
+			po.setStart(bo.getStart());
+			po.setTitle(bo.getTitle());
+			return po;
+		}
 		return null;
 	}
 

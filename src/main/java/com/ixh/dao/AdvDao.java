@@ -5,7 +5,7 @@ import java.util.List;
 import com.ixh.exception.DatabaseExceptionCO;
 import com.ixh.model.bo.AdvertiseBO;
 
-public interface AdvDao {
+public interface AdvDAO {
 
 	List<AdvertiseBO> getAllAdvertises();
 

@@ -1,8 +1,5 @@
 package com.ixh.model.bo;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class UserBO {
 
 private Long id;
@@ -15,8 +12,11 @@ private Long id;
 	
 	private String photoURL;
 	
-	private List<CuponBO> cupons;
-	
+	public UserBO(Long id) {
+		super();
+		this.id = id;
+	}
+
 	public UserBO(Long id, String uid, String email, String displayName, String photoURL) {
 		super();
 		this.id = id;
@@ -66,15 +66,4 @@ private Long id;
 		this.photoURL = photoURL;
 	}
 
-	public List<CuponBO> getCupons() {
-		if(cupons==null) {
-			cupons = new ArrayList<>();
-		}
-		return cupons;
-	}
-
-	public void setCupons(List<CuponBO> cupons) {
-		this.cupons = cupons;
-	}
-	
 }

@@ -17,17 +17,17 @@ import com.ixh.model.po.UserPO;
 @Transactional
 @Repository
 public class UserDAOImpl implements UserDAO {
-	
-	@PersistenceContext	
+
+	@PersistenceContext
 	private EntityManager entityManager;
-	
+
 	@Override
 	public UserPO save(UserPO userPO) {
 		entityManager.persist(userPO);
 		entityManager.flush();
 		return userPO;
 	}
-	
+
 	@Override
 	public UserBO find(String uid) throws DatabaseExceptionCO {
 		UserBO user = null;
@@ -35,10 +35,19 @@ public class UserDAOImpl implements UserDAO {
 		try {
 			Query query = entityManager.createQuery(hql);
 			query.setParameter("uid", uid);
-			user = Builders.userBuilder.buildBO((UserPO)query.getSingleResult());
+			user = Builders.userBuilder.buildBO((UserPO) query.getSingleResult());
 		} catch (NoResultException sre) {
 			throw new DatabaseExceptionCO("User " + uid + " not founded");
 		}
 		return user;
+	}
+
+	@Override
+	public UserPO findOne(Long primaryKey) {
+		String hql = "FROM UserPO where id = :id";
+		Query query = entityManager.createQuery(hql);
+		query.setParameter("id", primaryKey);
+		return (UserPO) query.getSingleResult();
+
 	}
 }

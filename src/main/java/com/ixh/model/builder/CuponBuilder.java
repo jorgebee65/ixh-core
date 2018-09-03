@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ixh.model.bo.CuponBO;
-import com.ixh.model.bo.UserBO;
 import com.ixh.model.po.CuponPO;
-import com.ixh.model.po.UserPO;
 
 public class CuponBuilder implements Builder<CuponBO, CuponPO>{
 
@@ -15,7 +13,10 @@ public class CuponBuilder implements Builder<CuponBO, CuponPO>{
 		CuponBO cupon = new CuponBO();
 			cupon.setId(po.getId());
 			cupon.setCode(po.getCode());
-			cupon.setUser(new UserBO(po.getUserPO().getId(), po.getUserPO().getUid(), po.getUserPO().getEmail(), po.getUserPO().getDisplayName(), po.getUserPO().getPhotoURL()));
+			cupon.setActive(po.isActive());
+			cupon.setCreationDate(po.getCreationDate());
+			if(po.getAdv()!=null)
+			cupon.setAdv(Builders.advBuilder.buildBO(po.getAdv()));
 		return cupon;
 	}
 
@@ -24,13 +25,16 @@ public class CuponBuilder implements Builder<CuponBO, CuponPO>{
 		CuponPO cupon = new CuponPO();
 			cupon.setId(bo.getId());
 			cupon.setCode(bo.getCode());
-			cupon.setUserPO(new UserPO(bo.getUser().getId(), bo.getUser().getUid(), bo.getUser().getEmail(), bo.getUser().getDisplayName(), bo.getUser().getPhotoURL()));
+			cupon.setActive(bo.isActive());
+			cupon.setCreationDate(bo.getCreationDate());
+			cupon.setAdv(Builders.advBuilder.buildPO(bo.getAdv()));
 		return cupon;
 	}
 
 	@Override
 	public List<CuponBO> buildListBO(List<CuponPO> lpos) {
 		List<CuponBO> lstBO = new ArrayList<>();
+		if(lpos!=null && !lpos.isEmpty())
 		lpos.forEach(po -> {
 			lstBO.add(buildBO(po));
 		});

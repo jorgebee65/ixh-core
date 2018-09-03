@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.ixh.dao.AdvDao;
+import com.ixh.dao.AdvDAO;
 import com.ixh.exception.DatabaseExceptionCO;
 import com.ixh.model.bo.AdvertiseBO;
 
@@ -20,7 +20,7 @@ import com.ixh.model.bo.AdvertiseBO;
 public class AdvController {
 	
 	@Autowired
-	private AdvDao advDAO;
+	private AdvDAO advDAO;
 	
 	@RequestMapping(value="/advs",method= RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<?> getAdvertisements() {

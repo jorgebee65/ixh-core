@@ -11,7 +11,7 @@ import javax.persistence.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ixh.dao.AdvDao;
+import com.ixh.dao.AdvDAO;
 import com.ixh.exception.DatabaseExceptionCO;
 import com.ixh.model.bo.AdvertiseBO;
 import com.ixh.model.builder.Builders;
@@ -21,7 +21,7 @@ import com.ixh.model.po.AdvertisePO;
 
 @Transactional
 @Repository
-public class AdvDaoImpl implements AdvDao {
+public class AdvDaoImpl implements AdvDAO {
 	@PersistenceContext	
 	private EntityManager entityManager;
 	

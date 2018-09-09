@@ -11,6 +11,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.ixh.model.bo.CuponBO;
 import com.ixh.service.CuponService;
+import com.ixh.service.NotificationService;
 
 @Controller
 @RequestMapping("/ixh")
@@ -19,9 +20,13 @@ public class CuponController {
 	@Autowired
 	private CuponService srvCupon;
 	
+	@Autowired
+	private NotificationService srvNotification;
+	
 	@RequestMapping(value = "/cupons", method = RequestMethod.POST)
 	ResponseEntity<?> save(@RequestBody CuponBO cupon, UriComponentsBuilder ucBuilder) {
 		CuponBO saved = srvCupon.generateCupon(cupon);
+		srvNotification.sendNotification(saved);
 		return new ResponseEntity<CuponBO>(saved,HttpStatus.OK);
 	}
 }

@@ -15,6 +15,7 @@ public class CuponBuilder implements Builder<CuponBO, CuponPO>{
 			cupon.setCode(po.getCode());
 			cupon.setActive(po.isActive());
 			cupon.setCreationDate(po.getCreationDate());
+			cupon.setUser(Builders.userBuilder.buildBO(po.getUserPO()));
 			if(po.getAdv()!=null)
 			cupon.setAdv(Builders.advBuilder.buildBO(po.getAdv()));
 		return cupon;

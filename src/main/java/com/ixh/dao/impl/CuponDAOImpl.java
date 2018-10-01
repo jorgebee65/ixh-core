@@ -75,14 +75,15 @@ public class CuponDAOImpl implements CuponDAO {
 	}
 	
 	@Override
-	public CuponBO getCupon(String pCup) throws DatabaseExceptionCO{
-			String hql = "FROM CuponPO where code = :code";
+	public CuponBO getCupon(String pCup, UserBO pUserBO) throws DatabaseExceptionCO{
+			String hql = "FROM CuponPO where code = :code and userPO.id = :userID";
 			try {
 				Query query = entityManager.createQuery(hql);
 				query.setParameter("code", pCup);
+				query.setParameter("userID", pUserBO.getId());
 				return Builders.cuponBuilder.buildBO((CuponPO)query.getSingleResult());
 			} catch (NoResultException sre) {
-				throw new DatabaseExceptionCO("No cupon founded");
+				throw new DatabaseExceptionCO("No se encontró el cupón ["+pCup+"] para el usuario especificado");
 			}
 	}
 

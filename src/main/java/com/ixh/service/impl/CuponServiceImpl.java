@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.hibernate.service.spi.ServiceException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +29,7 @@ import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.layout.property.VerticalAlignment;
+import com.ixh.controller.CuponController;
 import com.ixh.dao.AdvDAO;
 import com.ixh.dao.CuponDAO;
 import com.ixh.dao.UserDAO;
@@ -39,6 +42,8 @@ import com.ixh.util.RandomString;
 
 @Service
 public class CuponServiceImpl implements CuponService {
+	
+	Logger logger = LoggerFactory.getLogger(CuponServiceImpl.class);
 
 	@Autowired
 	private CuponDAO cuponDAO;
@@ -82,10 +87,11 @@ public class CuponServiceImpl implements CuponService {
 	}
 
 	@Override
-	public File generateFile(String psCupon) throws ServiceException {
+	public File generateFile(String psCupon, UserBO pUserBO) throws ServiceException {
 		try {
-			CuponBO cuponBO = cuponDAO.getCupon(psCupon);
+			CuponBO cuponBO = cuponDAO.getCupon(psCupon, pUserBO);
 			if (cuponBO != null) {
+				logger.info("El cupón si corresponde al usuario!");
 				String dest = "C:/itextExamples/" + psCupon + ".pdf";
 
 				PdfWriter writer;
@@ -207,7 +213,7 @@ public class CuponServiceImpl implements CuponService {
 			}
 			return new File("C:/itextExamples/" + psCupon + ".pdf");
 		} catch (DatabaseExceptionCO e) {
-			throw new ServiceException("Cupon no valido", e);
+			throw new ServiceException(e.getMessage(), e);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

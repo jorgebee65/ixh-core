@@ -73,5 +73,17 @@ public class CuponDAOImpl implements CuponDAO {
 		}
 		return false;
 	}
+	
+	@Override
+	public CuponBO getCupon(String pCup) throws DatabaseExceptionCO{
+			String hql = "FROM CuponPO where code = :code";
+			try {
+				Query query = entityManager.createQuery(hql);
+				query.setParameter("code", pCup);
+				return Builders.cuponBuilder.buildBO((CuponPO)query.getSingleResult());
+			} catch (NoResultException sre) {
+				throw new DatabaseExceptionCO("No cupon founded");
+			}
+	}
 
 }

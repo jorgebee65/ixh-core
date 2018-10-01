@@ -14,4 +14,6 @@ public interface CuponDAO {
 
 	boolean checkAvailability(String pCup);
 
+	CuponBO getCupon(String pCup) throws DatabaseExceptionCO;
+
 }

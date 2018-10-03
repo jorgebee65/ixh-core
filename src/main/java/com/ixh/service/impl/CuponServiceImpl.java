@@ -10,6 +10,7 @@ import org.hibernate.service.spi.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.itextpdf.io.font.FontConstants;
@@ -53,6 +54,9 @@ public class CuponServiceImpl implements CuponService {
 
 	@Autowired
 	private UserDAO usrDAO;
+	
+	@Value("${pub.colli.pdf.dest}")
+    private String destination;
 
 	@Override
 	public CuponBO generateCupon(CuponBO pCuponBO) throws ServiceException {
@@ -88,11 +92,12 @@ public class CuponServiceImpl implements CuponService {
 
 	@Override
 	public File generateFile(String psCupon, UserBO pUserBO) throws ServiceException {
+		String dest="";
 		try {
 			CuponBO cuponBO = cuponDAO.getCupon(psCupon, pUserBO);
 			if (cuponBO != null) {
 				logger.info("El cupón si corresponde al usuario!");
-				String dest = "C:/itextExamples/" + psCupon + ".pdf";
+				dest = destination + psCupon + ".pdf";
 
 				PdfWriter writer;
 
@@ -211,7 +216,8 @@ public class CuponServiceImpl implements CuponService {
 			} else {
 				throw new ServiceException("No se encontró el cupón");
 			}
-			return new File("C:/itextExamples/" + psCupon + ".pdf");
+			if(!dest.equals(""))
+			return new File(dest);
 		} catch (DatabaseExceptionCO e) {
 			throw new ServiceException(e.getMessage(), e);
 		} catch (FileNotFoundException e) {

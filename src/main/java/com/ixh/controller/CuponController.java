@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.ixh.exception.ServiceExceptionCO;
 import com.ixh.model.bo.CuponBO;
 import com.ixh.model.bo.UserBO;
 import com.ixh.service.CuponService;
@@ -45,10 +46,18 @@ public class CuponController {
 	private NotificationService srvNotification;
 
 	@RequestMapping(value = "/cupons", method = RequestMethod.POST)
-	ResponseEntity<?> save(@RequestBody CuponBO cupon, UriComponentsBuilder ucBuilder) {
+	ResponseEntity<?> save(@RequestBody CuponBO cupon,  UriComponentsBuilder ucBuilder, @RequestHeader HttpHeaders headers) throws ServiceExceptionCO {
+		String userId = headers.get("uid").get(0);
+		if (userId != null && !"".equals(userId)) {
+			logger.info("UID: " + userId);
+			UserBO userBO = srvUser.getUser(userId);
+			cupon.setUser(userBO);
 		CuponBO saved = srvCupon.generateCupon(cupon);
 		// srvNotification.sendNotification(saved);
 		return new ResponseEntity<CuponBO>(saved, HttpStatus.OK);
+		}else {
+			throw new ServiceExceptionCO("Debe estar logueado", CuponController.class);
+		}
 	}
 
 	@RequestMapping(value = "/cupons/{cuponid}", method = RequestMethod.GET)

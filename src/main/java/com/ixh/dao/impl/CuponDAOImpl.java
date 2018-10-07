@@ -7,8 +7,12 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 
+import org.hibernate.exception.ConstraintViolationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,12 +29,15 @@ import com.ixh.model.po.UserPO;
 @Repository
 public class CuponDAOImpl implements CuponDAO {
 	
+	Logger logger = LoggerFactory.getLogger(CuponDAOImpl.class);
+	
 	@PersistenceContext	
 	private EntityManager entityManager;
 	
 	@Override
-	public CuponBO save(CuponBO cuponBO) {
+	public CuponBO save(CuponBO cuponBO) throws DatabaseExceptionCO{
 		CuponPO cupon = new CuponPO();
+		try {
 		UserPO usrPO = entityManager.find(UserPO.class, cuponBO.getUser().getId());
 		AdvertisePO advPO = entityManager.find(AdvertisePO.class, cuponBO.getAdv().getId());
 		cupon.setUserPO(usrPO);
@@ -41,6 +48,19 @@ public class CuponDAOImpl implements CuponDAO {
 		entityManager.persist(cupon);
 		entityManager.flush();
 		return Builders.cuponBuilder.buildBO(cupon);
+		}catch(PersistenceException cv) {
+			 Throwable t = cv.getCause();
+			    while ((t != null) && !(t instanceof ConstraintViolationException)) {
+			        t = t.getCause();
+			    }
+			    if (t instanceof ConstraintViolationException) {
+			    	throw new DatabaseExceptionCO("El establecimiento solo permite un cupón por usuario",cv);
+			    }
+			    throw new DatabaseExceptionCO("Error al intentar asignar el cupon al usuario",cv);
+		}catch(Exception e) {
+			logger.error(e.getMessage(),e);
+			throw new DatabaseExceptionCO(e.getMessage(),e);
+		}
 	}
 	
 	

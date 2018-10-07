@@ -30,11 +30,11 @@ import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.layout.property.VerticalAlignment;
-import com.ixh.controller.CuponController;
 import com.ixh.dao.AdvDAO;
 import com.ixh.dao.CuponDAO;
 import com.ixh.dao.UserDAO;
 import com.ixh.exception.DatabaseExceptionCO;
+import com.ixh.exception.ServiceExceptionCO;
 import com.ixh.model.bo.AdvertiseBO;
 import com.ixh.model.bo.CuponBO;
 import com.ixh.model.bo.UserBO;
@@ -43,7 +43,7 @@ import com.ixh.util.RandomString;
 
 @Service
 public class CuponServiceImpl implements CuponService {
-	
+
 	Logger logger = LoggerFactory.getLogger(CuponServiceImpl.class);
 
 	@Autowired
@@ -54,30 +54,30 @@ public class CuponServiceImpl implements CuponService {
 
 	@Autowired
 	private UserDAO usrDAO;
-	
+
 	@Value("${pub.colli.pdf.dest}")
-    private String destination;
+	private String destination;
 
 	@Override
-	public CuponBO generateCupon(CuponBO pCuponBO) throws ServiceException {
+	public CuponBO generateCupon(CuponBO pCuponBO) throws ServiceExceptionCO {
 		CuponBO resp = new CuponBO();
 		AdvertiseBO adv = null;
 		UserBO usrBO = null;
 		try {
 			adv = advDAO.find(pCuponBO.getAdv().getId());
 			usrBO = usrDAO.find(pCuponBO.getUser().getUid());
+			Date today = new Date();
+			if (today.after(adv.getStart()) && today.before(adv.getEnds())) {
+				resp.setCode(generateCode());
+				resp.setAdv(adv);
+				resp.setUser(usrBO);
+			} else {
+				throw new ServiceException("La vigencia del cupón ha caducado.");
+			}
+			return cuponDAO.save(resp);
 		} catch (DatabaseExceptionCO e) {
-			e.printStackTrace();
+			throw new ServiceExceptionCO(e.getMessage(), e);
 		}
-		Date today = new Date();
-		if (today.after(adv.getStart()) && today.before(adv.getEnds())) {
-			resp.setCode(generateCode());
-			resp.setAdv(adv);
-			resp.setUser(usrBO);
-		} else {
-			throw new ServiceException("La vigencia del cupón ha caducado.");
-		}
-		return cuponDAO.save(resp);
 	}
 
 	private String generateCode() {
@@ -92,7 +92,7 @@ public class CuponServiceImpl implements CuponService {
 
 	@Override
 	public File generateFile(String psCupon, UserBO pUserBO) throws ServiceException {
-		String dest="";
+		String dest = "";
 		try {
 			CuponBO cuponBO = cuponDAO.getCupon(psCupon, pUserBO);
 			if (cuponBO != null) {
@@ -170,12 +170,14 @@ public class CuponServiceImpl implements CuponService {
 				Cell cContent1 = new Cell();
 				// Details2
 				Cell cdFirst = new Cell();
-				Paragraph original = new Paragraph(cuponBO.getAdv().getsOriginalPrice()).setFont(font).setLineThrough().setFontColor(Color.GRAY);
-				Paragraph newPrice = new Paragraph(cuponBO.getAdv().getsPrice()).setFont(font).setFontColor(Color.LIGHT_GRAY);
-				
+				Paragraph original = new Paragraph(cuponBO.getAdv().getsOriginalPrice()).setFont(font).setLineThrough()
+						.setFontColor(Color.GRAY);
+				Paragraph newPrice = new Paragraph(cuponBO.getAdv().getsPrice()).setFont(font)
+						.setFontColor(Color.LIGHT_GRAY);
+
 				cdFirst.add(original);
 				cdFirst.add(newPrice);
-				
+
 				cdFirst.setBorder(Border.NO_BORDER);
 				tbDetails2.addCell(cdFirst);
 
@@ -216,8 +218,8 @@ public class CuponServiceImpl implements CuponService {
 			} else {
 				throw new ServiceException("No se encontró el cupón");
 			}
-			if(!dest.equals(""))
-			return new File(dest);
+			if (!dest.equals(""))
+				return new File(dest);
 		} catch (DatabaseExceptionCO e) {
 			throw new ServiceException(e.getMessage(), e);
 		} catch (FileNotFoundException e) {

@@ -10,7 +10,7 @@ public interface CuponDAO {
 
 	List<CuponBO> getCupons(UserBO userBO) throws DatabaseExceptionCO;
 
-	CuponBO save(CuponBO cuponBO);
+	CuponBO save(CuponBO cuponBO) throws DatabaseExceptionCO;
 
 	boolean checkAvailability(String pCup);
 
